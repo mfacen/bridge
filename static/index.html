@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>critter-bridge</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+  <img id='logo' src='nadias_logo.jpeg' style='width:10%; min-width:80px; height:auto; position:absolute; top:10px; left:10px;' alt='critterOS logo'>
+  <h1>critter-bridge</h1>
+  <span id="ver" class="mut"></span>
+  <span class="spacer"></span>
+  <span class="mut">pulls boards → pushes cloud · trusted-LAN only</span>
+</header>
+<main>
+
+  <section>
+    <h2>Boards</h2>
+    <form id="board-form" class="row">
+      <input id="board-name" placeholder="Name (optional)">
+      <input id="board-host" placeholder="Board IP, e.g. 192.168.2.243" required>
+      <input id="board-interval" type="number" min="0" placeholder="Interval (0 = global)" style="max-width:12rem">
+      <button type="submit">Add board</button>
+    </form>
+    <div id="board-list"></div>
+  </section>
+
+  <section>
+    <h2>Settings</h2>
+    <form id="settings-form" class="row">
+      <label>Poll interval (s)
+        <input id="set-interval" type="number" min="5" style="max-width:6rem">
+      </label>
+      <label>Beacon port
+        <input id="set-beacon" type="number" min="0" max="65535" title="UDP beacon port the boards broadcast on (0 = discovery off)" style="max-width:6rem">
+      </label>
+      <label><input id="set-auto" type="checkbox"> auto-add discovered boards</label>
+      <label class="grow">Telegram bot token
+        <input id="set-token" type="password" placeholder="123:ABC…" class="grow">
+      </label>
+      <label>Chat id (for test)
+        <input id="set-chat" placeholder="e.g. 12345678" style="max-width:10rem">
+      </label>
+      <button type="submit">Save settings</button>
+      <button type="button" id="tg-test">Send Telegram test</button>
+    </form>
+  </section>
+
+  <section id="discovered-sec" hidden>
+    <h2>Discovered beacons — not added</h2>
+    <div id="discovered-list"></div>
+  </section>
+
+  <section>
+    <h2>Rules → Telegram</h2>
+    <form id="rule-form" class="row wrap">
+      <select id="rule-board" required></select>
+      <select id="rule-panel" required></select>
+      <select id="rule-op">
+        <option>></option><option>>=</option><option><</option>
+        <option><=</option><option>==</option><option>!=</option>
+      </select>
+      <input id="rule-threshold" type="number" step="any" placeholder="Threshold" required style="max-width:8rem">
+      <input id="rule-hyst" type="number" step="any" min="0" placeholder="Hysteresis" title="deadband in value units; 0 = cooldown-only" style="max-width:7rem">
+      <input id="rule-cooldown" type="number" min="10" placeholder="Cooldown s" style="max-width:8rem">
+      <input id="rule-chat" placeholder="Telegram chat id" required style="max-width:10rem">
+      <input id="rule-msg" class="grow" placeholder='Message — placeholders {device} {panel} {value}'>
+      <button type="submit">Add rule</button>
+    </form>
+    <div id="rule-list"></div>
+  </section>
+
+  <section>
+    <h2>Events</h2>
+    <ul id="events" class="events"></ul>
+  </section>
+
+</main>
+<script src="/app.js"></script>
+</body>
+</html>
